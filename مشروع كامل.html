@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>رحلة التفوق✨</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Cairo',sans-serif;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+}
+
+body{
+    overflow:hidden;
+    background:black;
+    color:white;
+    height:100vh;
+    perspective:1200px;
+}
+
+/* ================= خلفية النجوم ================= */
+
+canvas{
+    position:fixed;
+    inset:0;
+    z-index:-20;
+}
+
+/* ================= الشاشة ================= */
+
+#main{
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    margin:auto;
+    position:relative;
+    overflow:hidden;
+    background:#05050a;
+    transform-style:preserve-3d;
+    box-shadow:
+    0 0 80px rgba(0,0,0,0.8),
+    inset 0 0 100px rgba(255,255,255,0.03);
+    transition:2s;
+}
+
+@media(min-width:500px){
+    #main{
+        height:92vh;
+        margin-top:2vh;
+        border-radius:35px;
+        border:8px solid #1e293b;
+    }
+}
+
+#main.expand{
+    max-width:100vw;
+    height:100vh;
+    border:none;
+    border-radius:0;
+}
+
+/* ================= المراحل ================= */
+
+.stage{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    transition:2s;
+    transform:translateZ(-200px) scale(0.9);
+}
+
+.stage.active{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateZ(0px) scale(1);
+}
+
+/* ================= شاشة القفل ================= */
+
+#lock{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop');
+    background-size:cover;
+    background-position:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:100px;
+    z-index:100;
+    transition:1.5s;
+}
+
+#clock{
+    font-size:80px;
+    font-weight:200;
+    margin-bottom:60px;
+    text-shadow:
+    0 0 30px white,
+    0 0 60px rgba(255,255,255,0.5);
+}
+
+.notification{
+    width:90%;
+    padding:20px;
+    border-radius:25px;
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(20px);
+    cursor:pointer;
+    transform:rotateX(10deg) translateZ(30px);
+    box-shadow:0 20px 50px rgba(0,0,0,0.5);
+    animation:drop 1.5s;
+}
+
+@keyframes drop{
+    from{ opacity:0; transform:translateY(-100px) rotateX(40deg); }
+    to{ opacity:1; transform:translateY(0) rotateX(10deg); }
+}
+
+/* ================= الشات ================= */
+
+.header{
+    height:80px;
+    background:#202c33;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.5);
+}
+
+.avatar{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#00d2a0,#00796b);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(0,255,180,0.5);
+}
+
+.chat{
+    height:calc(100% - 80px);
+    overflow-y:auto;
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    background:url('https://www.transparenttextures.com/patterns/cubes.png'),#0b141a;
+}
+
+.bubble{
+    max-width:85%;
+    background:#005c4b;
+    padding:15px 18px;
+    border-radius:20px;
+    border-top-right-radius:0;
+    line-height:1.9;
+    animation:msg 0.7s;
+    transform-style:preserve-3d;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+@keyframes msg{
+    from{ opacity:0; transform:translateY(30px) rotateX(30deg); }
+    to{ opacity:1; transform:translateY(0) rotateX(0deg); }
+}
+
+.voice{
+    width:85%;
+    padding:18px;
+    border-radius:22px;
+    background:rgba(255,255,255,0.08);
+    display:flex;
+    align-items:center;
+    gap:15px;
+    cursor:pointer;
+    animation:msg 0.7s;
+}
+
+.voice-icon{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:#25d366;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+}
+
+.wave{
+    flex:1;
+    height:6px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#25d366,#fff,#25d366);
+    background-size:200px;
+    animation:wave 1s linear infinite;
+    animation-play-state: paused; 
+}
+
+.voice.playing .wave {
+    animation-play-state: running;
+}
+
+@keyframes wave{
+    from{ background-position:0; }
+    to{ background-position:200px; }
+}
+
+#startBtn{
+    width:85%;
+    margin:auto;
+    border:none;
+    padding:18px;
+    border-radius:30px;
+    background:linear-gradient(135deg,#ffd700,#ff7eb3);
+    color:black;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    display:none;
+    box-shadow:0 0 40px rgba(255,215,0,0.5);
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.06); }
+}
+
+/* ================= pin ================= */
+
+#pinStage{
+    background:radial-gradient(circle,#0f172a,#020617);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.lock3d{
+    font-size:70px;
+    animation:float 3s infinite;
+    text-shadow:0 0 30px #38bdf8;
+}
+
+@keyframes float{
+    0%,100%{ transform:translateY(0) rotateY(0deg); }
+    50%{ transform:translateY(-15px) rotateY(180deg); }
+}
+
+.pinTitle{
+    font-size:30px;
+    margin:15px 0;
+    text-align:center;
+}
+
+.dots{
+    display:flex;
+    gap:15px;
+    margin:35px 0;
+}
+
+.dot{
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    border:2px solid #38bdf8;
+    transition:0.3s;
+}
+
+.dot.fill{
+    background:#38bdf8;
+    box-shadow:0 0 20px #38bdf8;
+}
+
+.keys{
+    width:320px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.key{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    margin:auto;
+    background:rgba(255,255,255,0.05);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.2s;
+    transform-style:preserve-3d;
+}
+
+.key:active{
+    transform:scale(0.9) translateZ(-20px);
+    background:#38bdf8;
+    color:black;
+}
+
+/* ================= السينما ================= */
+
+#cinema{
+    position:absolute;
+    inset:0;
+    background:black;
+    z-index:500;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    overflow:hidden;
+}
+
+.cinemaText{
+    position:absolute;
+    width:85%;
+    opacity:0;
+    transform:scale(0.8) rotateX(40deg);
+    transition:2s;
+    font-size:34px;
+    line-height:2;
+    text-shadow:0 0 30px white;
+}
+
+.cinemaText.show{
+    opacity:1;
+    transform:scale(1) rotateX(0deg);
+}
+
+/* ================= scenes ================= */
+
+.scene{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    pointer-events:none;
+    transition:2s;
+}
+
+.scene.active{
+    opacity:1;
+    pointer-events:auto;
+}
+
+#scene1{ background:radial-gradient(circle,#1b2735,#05010a); }
+#scene2{ background:linear-gradient(to top,#2b1055,#7597de); }
+#scene3{ background:linear-gradient(to top,#ffcc33,#ff6b81); }
+
+.star{
+    position:absolute;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 30px white;
+    cursor:pointer;
+    animation:star 2s infinite alternate;
+}
+
+@keyframes star{
+    from{ transform:scale(0.8) translateZ(0); }
+    to{ transform:scale(1.4) translateZ(40px); }
+}
+
+.balloon{
+    position:absolute;
+    width:55px;
+    height:65px;
+    border-radius:50%;
+    bottom:-100px;
+    cursor:pointer;
+    animation:fly linear infinite;
+}
+
+@keyframes fly{
+    from{ transform:translateY(0) rotate(-5deg); }
+    to{ transform:translateY(-130vh) rotate(5deg); }
+}
+
+.popup{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) rotateX(30deg) scale(0.8);
+    width:88%;
+    max-width:520px;
+    padding:40px;
+    border-radius:30px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    border:1px solid rgba(255,255,255,0.15);
+    text-align:center;
+    opacity:0;
+    pointer-events:none;
+    transition:0.7s;
+    box-shadow:0 30px 60px rgba(0,0,0,0.5);
+}
+
+.popup.show{
+    opacity:1;
+    pointer-events:auto;
+    transform:translate(-50%,-50%) rotateX(0deg) scale(1);
+}
+
+.popup button{
+    margin-top:25px;
+    border:none;
+    padding:14px 30px;
+    border-radius:25px;
+    background:linear-gradient(135deg,#ffd700,#ff7eb3);
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.portal{
+    width:180px;
+    height:280px;
+    border-radius:120px 120px 0 0;
+    border:5px solid rgba(255,255,255,0.9);
+    background:linear-gradient(to top,rgba(255,255,255,0.95),transparent);
+    box-shadow:0 0 60px white, inset 0 0 50px gold;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    animation:portal 3s infinite alternate;
+}
+
+@keyframes portal{
+    from{ transform:scale(1) rotateY(-10deg); }
+    to{ transform:scale(1.08) rotateY(10deg); }
+}
+
+/* ================= finale ================= */
+
+#finale{
+    background:radial-gradient(circle,#1a0b2e,#030107);
+}
+
+.card{
+    position:absolute;
+    top:45%; /* تم رفع البطاقة قليلاً لتجنب تغطية الازرار */
+    left:50%;
+    transform:translate(-50%,-50%) rotateX(30deg) scale(0.6);
+    width:92%;
+    max-width:560px;
+    padding:45px 30px;
+    border-radius:35px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(15px);
+    border:2px solid gold;
+    text-align:center;
+    opacity:0;
+    transition:2s;
+    box-shadow:0 0 80px rgba(255,215,0,0.3);
+}
+
+.card.show{
+    opacity:1;
+    transform:translate(-50%,-50%) rotateX(0deg) scale(1);
+}
+
+.confetti{
+    position:absolute;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    from{ transform:translateY(-10vh) rotate(0deg); opacity:1; }
+    to{ transform:translateY(120vh) rotate(720deg); opacity:0; }
+}
+
+#quote{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.7); /* تم تخفيف اللون الأسود بشكل كبير */
+    backdrop-filter:blur(8px); /* إضافة ضبابية سينمائية لتوضيح النصوص */
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    opacity:0;
+    pointer-events:none;
+    transition:4s;
+    z-index:1000;
+}
+
+#quote.show{
+    opacity:1;
+}
+
+.quoteText{
+    width:85%;
+    text-align:center;
+    line-height:2;
+    font-size:38px;
+    text-shadow:0 0 40px white;
+    animation:quoteFloat 4s infinite;
+}
+
+@keyframes quoteFloat{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-15px); }
+}
+
+.quoteSign{
+    margin-top:40px;
+    color:#ffb3c6;
+    font-size:28px;
+}
+
+/* ================= flash ================= */
+
+#flash{
+    position:fixed;
+    inset:0;
+    background:white;
+    opacity:0;
+    pointer-events:none;
+    z-index:9999;
+}
+
+.flash{ animation:flash 1s; }
+
+@keyframes flash{
+    0%{opacity:0;}
+    20%{opacity:1;}
+    100%{opacity:0;}
+}
+
+/* ================= الأكواد الجديدة للتحسين ================= */
+.final-buttons{
+    position:absolute;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    justify-content:center;
+    width: 95%; /* ضمان عدم خروج الأزرار في الهواتف */
+    z-index:1500; /* تم رفع الأزرار لتكون دائمًا في الأعلى وظاهرة بوضوح */
+}
+
+.finalBtn{
+    border:none;
+    padding:12px 20px;
+    border-radius:25px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(135deg,#7f5af0,#2cb67d);
+    box-shadow:0 0 25px rgba(127,90,240,0.4);
+    transition:0.3s;
+    flex: 1 1 auto;
+    text-align: center;
+    max-width: 160px;
+}
+
+.finalBtn:hover{
+    transform:translateY(-5px) scale(1.05);
+}
+
+.exitBtn{
+    background:linear-gradient(135deg,#ff4d6d,#ff758f);
+    box-shadow:0 0 25px rgba(255,77,109,0.4);
+}
+
+/* ================= المطورين ================= */
+#developersPanel{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    backdrop-filter:blur(10px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:1s;
+    z-index:2000;
+}
+
+#developersPanel.show{
+    opacity:1;
+    pointer-events:auto;
+}
+
+.devCard{
+    width:95%;
+    max-width:650px;
+    padding:30px;
+    border-radius:35px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.15);
+    backdrop-filter:blur(20px);
+    text-align:center;
+    transform:rotateX(25deg) scale(0.8);
+    transition:1s;
+    box-shadow:0 0 60px rgba(255,255,255,0.1);
+}
+
+#developersPanel.show .devCard{
+    transform:rotateX(0deg) scale(1);
+}
+
+.devTitle{
+    font-size:32px;
+    margin-bottom:20px;
+    text-shadow:0 0 20px white;
+}
+
+.devList{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-bottom:25px;
+    max-height:50vh;
+    overflow-y:auto;
+    padding-right:5px;
+}
+
+.devItem{
+    padding:12px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.07);
+    font-size:18px;
+    transition:0.3s;
+}
+
+.devItem:hover{
+    transform:scale(1.03);
+    background:rgba(255,255,255,0.12);
+}
+
+.devButtons{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.devList::-webkit-scrollbar { width: 6px; }
+.devList::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+.devList::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 10px; }
+
+.exit-screen {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: 99999;
+    pointer-events: none;
+}
+
+.exit-screen.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ================= تعديلات الهاتف القوية ================= */
+@media(max-width: 480px){
+    .final-buttons{
+        bottom: 20px;
+        gap: 8px;
+    }
+    .finalBtn{
+        padding: 10px;
+        font-size: 14px;
+        max-width: 110px; /* تصغير الزر ليناسب ثلاثة أزرار في الهاتف */
+    }
+    .quoteText{
+        font-size: 26px; /* تصغير حجم الخط في الهاتف لتجنب التشوه */
+    }
+    .quoteSign{
+        font-size: 22px;
+    }
+    .devList {
+        grid-template-columns: 1fr !important; /* تحويل الأسماء لعمود واحد في الهواتف الصغيرة */
+    }
+    .devItem {
+        font-size: 16px;
+    }
+    .keys {
+        width: 280px;
+    }
+    .key {
+        width: 65px;
+        height: 65px;
+        font-size: 26px;
+    }
+    .card h1 {
+        font-size: 32px !important;
+    }
+    .card p {
+        font-size: 18px !important;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="exitScreen" class="exit-screen">تم إغلاق الرحلة 👋</div>
+
+<canvas id="canvas"></canvas>
+
+<div id="flash"></div>
+
+<audio id="notify" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+<audio id="beep" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+<audio id="success" src="https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3"></audio>
+<audio id="voiceSong" src="song.mp3"></audio>
+
+<audio id="music" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=emotional-piano-112191.mp3">
+</audio>
+
+<div id="main">
+
+<div id="phoneStage" class="stage active">
+
+<div id="lock">
+<div id="clock">12:00</div>
+<div class="notification" onclick="unlockPhone()">
+<h2>🟢 واتساب - أنس</h2>
+<p style="margin-top:10px;">هناك شيء صُنع خصيصًا لكِ يا حنان ✨</p>
+</div>
+</div>
+
+<div class="header">
+<div class="avatar">أ</div>
+<div>
+<h3>أنس</h3>
+<p id="status">متصل الآن</p>
+</div>
+</div>
+
+<div class="chat" id="chat">
+<button id="startBtn" onclick="openPin()">الدخول إلى الرحلة ✨</button>
+</div>
+
+</div>
+
+<div id="pinStage" class="stage">
+
+<div class="lock3d">🔒</div>
+<div class="pinTitle">نظام التشفير الذكي</div>
+<p style="color:#94a3b8;text-align:center;">أدخلي سنة النجاح 🎓</p>
+
+<div class="dots">
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+<div class="dot"></div>
+</div>
+
+<div class="keys">
+<div class="key" onclick="press(1)">1</div>
+<div class="key" onclick="press(2)">2</div>
+<div class="key" onclick="press(3)">3</div>
+<div class="key" onclick="press(4)">4</div>
+<div class="key" onclick="press(5)">5</div>
+<div class="key" onclick="press(6)">6</div>
+<div class="key" onclick="press(7)">7</div>
+<div class="key" onclick="press(8)">8</div>
+<div class="key" onclick="press(9)">9</div>
+<div class="key"></div>
+<div class="key" onclick="press(0)">0</div>
+<div class="key" onclick="clearPin()">⌫</div>
+</div>
+
+</div>
+
+<div id="cinema">
+<div class="cinemaText" id="c1">الرمز صحيح...</div>
+<div class="cinemaText" id="c2">لقد تجاوزتِ ليالي الخوف والتعب...</div>
+<div class="cinemaText" id="c3">وكان كل ذلك يقودكِ إلى هذه اللحظة ✨</div>
+<div class="cinemaText" id="c4">اليوم... يوم انتصاركِ 🎓</div>
+</div>
+
+<div id="scene1" class="scene">
+<div id="stars"></div>
+<div class="popup" id="pop1">
+<h2 id="txt1"></h2>
+<button onclick="closePop(1)">أكملي ✨</button>
+</div>
+</div>
+
+<div id="scene2" class="scene">
+<div id="balloons"></div>
+<div class="popup" id="pop2">
+<h2 id="txt2"></h2>
+<button onclick="closePop(2)">تابعي 🌸</button>
+</div>
+</div>
+
+<div id="scene3" class="scene">
+<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
+<h1 style="margin-bottom:50px;">لقد وصلتِ إلى النهاية...</h1>
+<div class="portal" onclick="finale()">
+<h2 style="color:black;">اعبري ✨</h2>
+</div>
+</div>
+</div>
+
+<div id="finale" class="scene">
+
+<div id="confetti"></div>
+
+<div class="card" id="card">
+<div style="font-size:80px;">🏆</div>
+<h1 style="margin:20px 0; color:gold; font-size:42px;">مبروك يا حنان 🎓</h1>
+<p style="line-height:2.2; font-size:22px;">
+هذا لم يكن مجرد نجاح...<br>
+بل كان انتصارًا على التعب والخوف وكل اللحظات الصعبة.<br>
+أنا فخور جدًا بكِ 💖
+</p>
+<div style="margin-top:35px; font-size:28px; color:#ffb3c6;">✨ عقبال البكالوريا والجامعة ✨</div>
+</div>
+
+<!-- تم نقل الأزرار هنا لتكون دائماً مرئية وفوق الشاشة المظلمة -->
+<div class="final-buttons">
+    <button class="finalBtn" onclick="restartExperience()">إعادة التجربة 🔄</button>
+    <button class="finalBtn" onclick="openDevelopers()">المطورين 💻</button>
+    <button class="finalBtn exitBtn" onclick="closeExperience()">خروج 🚪</button>
+</div>
+
+<div id="quote">
+<div class="quoteText">"وما كان هذا النجاح...<br>إلا بداية لعظمة قادمة."</div>
+<div class="quoteSign">— أنس 💖</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- قسم المطورين -->
+<div id="developersPanel">
+    <div class="devCard">
+        <div class="devTitle">طاقم العمل والمطورين</div>
+        <div class="devList">
+            <!-- أنس الـ Big Boss -->
+            <div class="devItem" style="grid-column: 1 / -1; background: linear-gradient(135deg, #ffd700, #ff7eb3); color: black; font-weight: bold; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);">
+                أنوس - المطور، الرئيس والـ Big Boss 👑
+            </div>
+            <div class="devItem">ابوشنب - كبير المصممين 🧔🏻</div>
+            <div class="devItem">سنيورك - مهندس تجربة المستخدم ✨</div>
+            <div class="devItem">مزك - مصمم الأنيميشن 🎬</div>
+            <div class="devItem">قلبك - المستشار الإبداعي ❤️</div>
+            <div class="devItem">كيوتك - مصمم الواجهات 🎨</div>
+            <div class="devItem">كتكوتك - مسؤول الألوان 🐥</div>
+            <div class="devItem">وليدك - مساعد التصميم 💻</div>
+            <div class="devItem">هياااااتم - خبير المؤثرات 💥</div>
+            <div class="devItem">وتينك - مهندس السعادة 💓</div>
+            <div class="devItem">يور هارت - مراجع الجودة 💖</div>
+            <div class="devItem">جنغل مان - صائد الأخطاء 🦍</div>
+            <div class="devItem">سكرك - اللمسات السحرية 🍬</div>
+        </div>
+        <div class="devButtons">
+            <button class="finalBtn" onclick="closeDevelopers()">إغلاق ❌</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+/* ================= الساعة ================= */
+setInterval(()=>{
+    let d = new Date();
+    document.getElementById("clock").innerHTML =
+    d.getHours().toString().padStart(2,"0") + ":" + d.getMinutes().toString().padStart(2,"0");
+},1000);
+
+/* ================= تشغيل الموسيقى ================= */
+document.body.addEventListener("click",()=>{
+    let music = document.getElementById("music");
+    music.volume = 0.25;
+    music.play().catch(e=>{});
+},{once:true});
+
+/* ================= خلفية النجوم ================= */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let stars = [];
+for(let i=0;i<220;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        s:Math.random()*2,
+        sp:Math.random()*0.5
+    });
+}
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "white";
+    stars.forEach(st=>{
+        ctx.beginPath();
+        ctx.arc(st.x,st.y,st.s,0,Math.PI*2);
+        ctx.fill();
+        st.y += st.sp;
+        if(st.y > canvas.height){
+            st.y = 0;
+            st.x = Math.random()*canvas.width;
+        }
+    });
+    requestAnimationFrame(animate);
+}
+animate();
+
+/* ================= الرسائل ================= */
+let msgs = [
+    "أهلًا حنان 👋",
+    "تعبكِ هذه السنة لم يكن عاديًا...",
+    "كل لحظة خوف كانت تصنع منكِ شخصًا أقوى.",
+    "كل دعوة وكل دمعة تعب... أوصلتكِ لهذا اليوم ✨",
+    "لقد صنعت لكِ رحلة لن تنسيها أبدًا 💖"
+];
+
+let i = 0;
+
+function unlockPhone(){
+    document.getElementById("lock").style.transform = "translateY(-100%)";
+    document.getElementById("lock").style.opacity = "0";
+    setTimeout(sendMsg,1200);
+}
+
+function sendMsg(){
+    if(i < msgs.length){
+        document.getElementById("status").innerHTML = "يكتب...";
+        setTimeout(()=>{
+            document.getElementById("status").innerHTML = "متصل الآن";
+            let div = document.createElement("div");
+            div.className = "bubble";
+            div.innerHTML = msgs[i];
+            document.getElementById("chat").insertBefore(div, document.getElementById("startBtn"));
+            document.getElementById("notify").play();
+            i++;
+
+            if(i === msgs.length){
+                setTimeout(()=>{
+                    let voice = document.createElement("div");
+                    voice.className = "voice";
+                    voice.innerHTML = `<div class="voice-icon">🎤</div><div class="wave"></div>`;
+                    
+                    voice.onclick = ()=>{
+                        let song = document.getElementById("voiceSong");
+                        let bgMusic = document.getElementById("music");
+                        if(song.paused) {
+                            bgMusic.volume = 0.05; 
+                            song.play();
+                            voice.classList.add("playing");
+                        } else {
+                            song.pause();
+                            song.currentTime = 0;
+                            bgMusic.volume = 0.25;
+                            voice.classList.remove("playing");
+                        }
+                    };
+
+                    document.getElementById("voiceSong").onended = () => {
+                        document.getElementById("music").volume = 0.25;
+                        voice.classList.remove("playing");
+                    };
+
+                    document.getElementById("chat").insertBefore(voice, document.getElementById("startBtn"));
+                    
+                    setTimeout(()=>{
+                        document.getElementById("startBtn").style.display = "block";
+                    },2500);
+                },2000);
+            } else {
+                setTimeout(sendMsg,2800);
+            }
+        },1800);
+    }
+}
+
+/* ================= pin ================= */
+function openPin(){
+    let song = document.getElementById("voiceSong");
+    song.pause();
+    document.getElementById("main").classList.add("expand");
+    document.getElementById("phoneStage").classList.remove("active");
+    setTimeout(()=>{
+        document.getElementById("pinStage").classList.add("active");
+    },1500);
+}
+
+let pin = "";
+const correct = "2026";
+
+function press(n){
+    if(pin.length < 4){
+        pin += n;
+        document.getElementById("beep").play();
+        updateDots();
+        if(pin.length === 4){
+            setTimeout(check,500);
+        }
+    }
+}
+
+function clearPin(){
+    pin = "";
+    updateDots();
+}
+
+function updateDots(){
+    let dots = document.querySelectorAll(".dot");
+    dots.forEach((d,index)=>{
+        if(index < pin.length){
+            d.classList.add("fill");
+        } else {
+            d.classList.remove("fill");
+        }
+    });
+}
+
+function check(){
+    if(pin === correct){
+        flash();
+        document.getElementById("success").play();
+        setTimeout(startCinema,1500);
+    } else {
+        navigator.vibrate?.([100,50,100]);
+        pin = "";
+        updateDots();
+    }
+}
+
+function flash(){
+    document.getElementById("flash").classList.add("flash");
+    setTimeout(()=>{
+        document.getElementById("flash").classList.remove("flash");
+    },1000);
+}
+
+/* ================= السينما ================= */
+function startCinema(){
+    document.getElementById("pinStage").classList.remove("active");
+    let cinema = document.getElementById("cinema");
+    cinema.style.display = "flex";
+    let arr = ["c1","c2","c3","c4"];
+    let index = 0;
+
+    function next(){
+        if(index < arr.length){
+            let el = document.getElementById(arr[index]);
+            el.classList.add("show");
+            setTimeout(()=>{
+                el.classList.remove("show");
+                index++;
+                setTimeout(next,1500);
+            },4500);
+        } else {
+            cinema.style.display = "none";
+            startScene1();
+        }
+    }
+    next();
+}
+
+/* ================= scene1 ================= */
+let s1 = 0;
+const txts1 = [
+    "كل نجمة هنا تمثل دعوة صادقة لكِ ✨",
+    "سهركِ الطويل كان يصنع هذا اليوم.",
+    "أنتِ أقوى مما كنتِ تتخيلين 💖",
+    "كل شيء مؤلم مررتِ به... انتهى الآن."
+];
+
+function startScene1(){
+    document.getElementById("scene1").classList.add("active");
+    for(let i=0;i<4;i++){
+        let star = document.createElement("div");
+        star.className = "star";
+        star.style.left = Math.random()*80 + 10 + "vw";
+        star.style.top = Math.random()*70 + 10 + "vh";
+        star.onclick = ()=>{
+            star.remove();
+            show1();
+        };
+        document.getElementById("stars").appendChild(star);
+    }
+}
+
+function show1(){
+    document.getElementById("pop1").classList.add("show");
+    document.getElementById("txt1").innerHTML = txts1[s1];
+    s1++;
+}
+
+function closePop(id){
+    document.getElementById("pop"+id).classList.remove("show");
+    if(id === 1 && s1 === 4){
+        document.getElementById("scene1").classList.remove("active");
+        setTimeout(startScene2,2000);
+    }
+    if(id === 2 && s2 === 4){
+        document.getElementById("scene2").classList.remove("active");
+        setTimeout(()=>{
+            document.getElementById("scene3").classList.add("active");
+        },2000);
+    }
+}
+
+/* ================= scene2 ================= */
+let s2 = 0;
+const txts2 = [
+    "كل حلم حملته السماء عاد إليكِ نجاحًا 🎈",
+    "كل خوف انتهى اليوم.",
+    "اليوم هو يومكِ يا بطلة 🏆",
+    "والمستقبل الجميل بانتظاركِ ✨"
+];
+
+function startScene2(){
+    document.getElementById("scene2").classList.add("active");
+    for(let i=0;i<4;i++){
+        let b = document.createElement("div");
+        b.className = "balloon";
+        b.style.left = Math.random()*80 + 10 + "vw";
+        b.style.background = ["#ff9ff3","#feca57","#48dbfb","#1dd1a1"][i];
+        b.style.animationDuration = Math.random()*4 + 6 + "s";
+        b.onclick = ()=>{
+            b.remove();
+            show2();
+        };
+        document.getElementById("balloons").appendChild(b);
+    }
+}
+
+function show2(){
+    document.getElementById("pop2").classList.add("show");
+    document.getElementById("txt2").innerHTML = txts2[s2];
+    s2++;
+}
+
+/* ================= النهاية ================= */
+function finale(){
+    document.getElementById("scene3").classList.remove("active");
+    setTimeout(()=>{
+        document.getElementById("finale").classList.add("active");
+        setTimeout(()=>{
+            document.getElementById("card").classList.add("show");
+            confetti();
+        },1500);
+    },1500);
+}
+
+function confetti(){
+    let emojis = ["🎉","✨","🎓","💖","🏆"];
+    for(let i=0;i<160;i++){
+        let c = document.createElement("div");
+        c.className = "confetti";
+        c.innerHTML = emojis[Math.floor(Math.random()*emojis.length)];
+        c.style.left = Math.random()*100 + "vw";
+        c.style.fontSize = Math.random()*25 + 15 + "px";
+        c.style.animationDuration = Math.random()*4 + 4 + "s";
+        document.getElementById("confetti").appendChild(c);
+    }
+    setTimeout(()=>{
+        document.getElementById("quote").classList.add("show");
+    },12000);
+}
+
+/* ================= دوال التحكم ================= */
+function restartExperience(){
+    location.reload();
+}
+
+function openDevelopers(){
+    document.getElementById("developersPanel").classList.add("show");
+}
+
+function closeDevelopers(){
+    document.getElementById("developersPanel").classList.remove("show");
+}
+
+function closeExperience(){
+    let exit = document.getElementById("exitScreen");
+    exit.classList.add("show");
+    setTimeout(() => {
+        document.body.innerHTML = ``;
+        document.body.style.background = "black";
+    }, 1000);
+}
+
+</script>
+
+</body>
+</html>
