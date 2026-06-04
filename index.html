@@ -57,7 +57,7 @@ canvas{
 @media(min-width:500px){
     #main{
         height:92vh;
-        margin-top:2vh;
+        margin-top:4vh;
         border-radius:35px;
         border:8px solid #1e293b;
     }
@@ -66,6 +66,7 @@ canvas{
 #main.expand{
     max-width:100vw;
     height:100vh;
+    margin-top:0;
     border:none;
     border-radius:0;
 }
@@ -120,6 +121,7 @@ canvas{
     border-radius:25px;
     background:rgba(255,255,255,0.12);
     backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     cursor:pointer;
     transform:rotateX(10deg) translateZ(30px);
     box-shadow:0 20px 50px rgba(0,0,0,0.5);
@@ -372,8 +374,8 @@ canvas{
 
 .star{
     position:absolute;
-    width:18px;
-    height:18px;
+    width:24px;
+    height:24px;
     border-radius:50%;
     background:white;
     box-shadow:0 0 30px white;
@@ -412,6 +414,7 @@ canvas{
     border-radius:30px;
     background:rgba(255,255,255,0.08);
     backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
     border:1px solid rgba(255,255,255,0.15);
     text-align:center;
     opacity:0;
@@ -464,7 +467,7 @@ canvas{
 
 .card{
     position:absolute;
-    top:45%; /* تم رفع البطاقة قليلاً لتجنب تغطية الازرار */
+    top:45%;
     left:50%;
     transform:translate(-50%,-50%) rotateX(30deg) scale(0.6);
     width:92%;
@@ -473,6 +476,7 @@ canvas{
     border-radius:35px;
     background:rgba(255,255,255,0.06);
     backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
     border:2px solid gold;
     text-align:center;
     opacity:0;
@@ -498,8 +502,9 @@ canvas{
 #quote{
     position:absolute;
     inset:0;
-    background:rgba(0,0,0,0.7); /* تم تخفيف اللون الأسود بشكل كبير */
-    backdrop-filter:blur(8px); /* إضافة ضبابية سينمائية لتوضيح النصوص */
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -553,7 +558,7 @@ canvas{
     100%{opacity:0;}
 }
 
-/* ================= الأكواد الجديدة للتحسين ================= */
+/* ================= أزرار التحكم النهائي ================= */
 .final-buttons{
     position:absolute;
     bottom:30px;
@@ -563,8 +568,8 @@ canvas{
     gap:12px;
     flex-wrap:wrap;
     justify-content:center;
-    width: 95%; /* ضمان عدم خروج الأزرار في الهواتف */
-    z-index:1500; /* تم رفع الأزرار لتكون دائمًا في الأعلى وظاهرة بوضوح */
+    width: 95%;
+    z-index:1500;
 }
 
 .finalBtn{
@@ -598,6 +603,7 @@ canvas{
     inset:0;
     background:rgba(0,0,0,0.95);
     backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -620,6 +626,7 @@ canvas{
     background:rgba(255,255,255,0.08);
     border:1px solid rgba(255,255,255,0.15);
     backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     text-align:center;
     transform:rotateX(25deg) scale(0.8);
     transition:1s;
@@ -699,16 +706,16 @@ canvas{
     .finalBtn{
         padding: 10px;
         font-size: 14px;
-        max-width: 110px; /* تصغير الزر ليناسب ثلاثة أزرار في الهاتف */
+        max-width: 110px;
     }
     .quoteText{
-        font-size: 26px; /* تصغير حجم الخط في الهاتف لتجنب التشوه */
+        font-size: 26px;
     }
     .quoteSign{
         font-size: 22px;
     }
     .devList {
-        grid-template-columns: 1fr !important; /* تحويل الأسماء لعمود واحد في الهواتف الصغيرة */
+        grid-template-columns: 1fr !important;
     }
     .devItem {
         font-size: 16px;
@@ -830,9 +837,9 @@ canvas{
 </div>
 
 <div id="scene3" class="scene">
-<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center;">
-<h1 style="margin-bottom:50px;">لقد وصلتِ إلى النهاية...</h1>
-<div class="portal" onclick="finale()">
+<div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; width:100%;">
+<h1 style="margin-bottom:50px; padding:0 20px;">لقد وصلتِ إلى النهاية...</h1>
+<div class="portal" onclick="finale()" style="margin:auto;">
 <h2 style="color:black;">اعبري ✨</h2>
 </div>
 </div>
@@ -853,7 +860,6 @@ canvas{
 <div style="margin-top:35px; font-size:28px; color:#ffb3c6;">✨ عقبال البكالوريا والجامعة ✨</div>
 </div>
 
-<!-- تم نقل الأزرار هنا لتكون دائماً مرئية وفوق الشاشة المظلمة -->
 <div class="final-buttons">
     <button class="finalBtn" onclick="restartExperience()">إعادة التجربة 🔄</button>
     <button class="finalBtn" onclick="openDevelopers()">المطورين 💻</button>
@@ -869,12 +875,10 @@ canvas{
 
 </div>
 
-<!-- قسم المطورين -->
 <div id="developersPanel">
     <div class="devCard">
         <div class="devTitle">طاقم العمل والمطورين</div>
         <div class="devList">
-            <!-- أنس الـ Big Boss -->
             <div class="devItem" style="grid-column: 1 / -1; background: linear-gradient(135deg, #ffd700, #ff7eb3); color: black; font-weight: bold; box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);">
                 أنوس - المطور، الرئيس والـ Big Boss 👑
             </div>
@@ -885,7 +889,7 @@ canvas{
             <div class="devItem">كيوتك - مصمم الواجهات 🎨</div>
             <div class="devItem">كتكوتك - مسؤول الألوان 🐥</div>
             <div class="devItem">وليدك - مساعد التصميم 💻</div>
-            <div class="devItem">هياااااتم - خبير المؤثرات 💥</div>
+            <div class="devItem">هيااااتم - خبير المؤثرات 💥</div>
             <div class="devItem">وتينك - مهندس السعادة 💓</div>
             <div class="devItem">يور هارت - مراجع الجودة 💖</div>
             <div class="devItem">جنغل مان - صائد الأخطاء 🦍</div>
@@ -913,17 +917,21 @@ document.body.addEventListener("click",()=>{
     music.play().catch(e=>{});
 },{once:true});
 
-/* ================= خلفية النجوم ================= */
+/* ================= خلفية النجوم والتجاوب ================= */
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
 let stars = [];
 for(let i=0;i<220;i++){
     stars.push({
-        x:Math.random()*canvas.width,
-        y:Math.random()*canvas.height,
+        x:Math.random()*window.innerWidth,
+        y:Math.random()*window.innerHeight,
         s:Math.random()*2,
         sp:Math.random()*0.5
     });
@@ -972,7 +980,7 @@ function sendMsg(){
             div.className = "bubble";
             div.innerHTML = msgs[i];
             document.getElementById("chat").insertBefore(div, document.getElementById("startBtn"));
-            document.getElementById("notify").play();
+            document.getElementById("notify").play().catch(e=>{});
             i++;
 
             if(i === msgs.length){
@@ -986,7 +994,7 @@ function sendMsg(){
                         let bgMusic = document.getElementById("music");
                         if(song.paused) {
                             bgMusic.volume = 0.05; 
-                            song.play();
+                            song.play().catch(e=>{});
                             voice.classList.add("playing");
                         } else {
                             song.pause();
@@ -1031,7 +1039,7 @@ const correct = "2026";
 function press(n){
     if(pin.length < 4){
         pin += n;
-        document.getElementById("beep").play();
+        document.getElementById("beep").play().catch(e=>{});
         updateDots();
         if(pin.length === 4){
             setTimeout(check,500);
@@ -1058,7 +1066,7 @@ function updateDots(){
 function check(){
     if(pin === correct){
         flash();
-        document.getElementById("success").play();
+        document.getElementById("success").play().catch(e=>{});
         setTimeout(startCinema,1500);
     } else {
         navigator.vibrate?.([100,50,100]);
@@ -1101,6 +1109,7 @@ function startCinema(){
 
 /* ================= scene1 ================= */
 let s1 = 0;
+let sceneActive = false;
 const txts1 = [
     "كل نجمة هنا تمثل دعوة صادقة لكِ ✨",
     "سهركِ الطويل كان يصنع هذا اليوم.",
@@ -1116,6 +1125,7 @@ function startScene1(){
         star.style.left = Math.random()*80 + 10 + "vw";
         star.style.top = Math.random()*70 + 10 + "vh";
         star.onclick = ()=>{
+            if(document.getElementById("pop1").classList.contains("show")) return;
             star.remove();
             show1();
         };
@@ -1161,6 +1171,7 @@ function startScene2(){
         b.style.background = ["#ff9ff3","#feca57","#48dbfb","#1dd1a1"][i];
         b.style.animationDuration = Math.random()*4 + 6 + "s";
         b.onclick = ()=>{
+            if(document.getElementById("pop2").classList.contains("show")) return;
             b.remove();
             show2();
         };
@@ -1188,6 +1199,7 @@ function finale(){
 
 function confetti(){
     let emojis = ["🎉","✨","🎓","💖","🏆"];
+    let container = document.getElementById("confetti");
     for(let i=0;i<160;i++){
         let c = document.createElement("div");
         c.className = "confetti";
@@ -1195,7 +1207,7 @@ function confetti(){
         c.style.left = Math.random()*100 + "vw";
         c.style.fontSize = Math.random()*25 + 15 + "px";
         c.style.animationDuration = Math.random()*4 + 4 + "s";
-        document.getElementById("confetti").appendChild(c);
+        container.appendChild(c);
     }
     setTimeout(()=>{
         document.getElementById("quote").classList.add("show");
