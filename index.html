@@ -697,59 +697,58 @@ canvas{
     pointer-events: auto;
 }
 
-/* ================= تعديلات الهاتف القوية ================= */
+//* ================= تعديلات الهاتف القوية ================= */
 @media(max-width: 480px){
-    /* 1. رفع بطاقة الرسالة للأعلى وتصغير حوافها قليلاً لتتسع الشاشة */
+    /* 1. تصغير البطاقة الذهبية والنصوص بداخلها لتتسع الشاشة بالكامل */
     .card {
-        top: 38% !important; /* تم رفع البطاقة */
-        padding: 25px 15px !important;
+        top: 38% !important; 
+        padding: 20px 10px !important;
         width: 95% !important;
     }
+    .card > div:first-child { /* تصغير الإيموجي 🏆 */
+        font-size: 50px !important;
+    }
     .card h1 {
-        font-size: 30px !important;
+        font-size: 26px !important;
         margin: 10px 0 !important;
     }
     .card p {
-        font-size: 17px !important;
-        line-height: 1.8 !important;
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+        margin: 0 !important;
+    }
+    .card div:last-child { /* جملة عقبال البكالوريا */
+        font-size: 18px !important;
+        margin-top: 15px !important;
     }
 
-    /* 2. ترتيب الأزرار وتوفير مساحتها */
+    /* 2. ترتيب الأزرار بذكاء: زرين في سطر، وزر الخروج تحتهما (يوفر مساحة طولية كبيرة جداً) */
     .final-buttons{
-        bottom: 90px; /* نزلناها بشكل طفيف جداً لتعطي مساحة للنص، وستبقى فوق شريط الهاتف */
-        gap: 12px;
-        flex-direction: column;
-        align-items: center;
+        bottom: 50px !important; /* مرفوعة عن حافة شريط الهاتف */
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        width: 100% !important;
     }
     .finalBtn{
-        padding: 12px;
-        font-size: 15px;
-        width: 85%;
-        max-width: 250px;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        padding: 12px 5px !important;
+        font-size: 14px !important;
+        width: 45% !important; /* الزرين بجانب بعض */
+        max-width: none !important;
+        margin: 0 !important;
+    }
+    .exitBtn {
+        width: 92% !important; /* زر الخروج يأخذ سطر كامل تحتهما لسهولة الضغط */
     }
     
-    /* 3. تعديلات النصوص والمفاتيح الأخرى */
-    .quoteText{
-        font-size: 24px;
-    }
-    .quoteSign{
-        font-size: 20px;
-    }
-    .devList {
-        grid-template-columns: 1fr !important;
-    }
-    .devItem {
-        font-size: 16px;
-    }
-    .keys {
-        width: 280px;
-    }
-    .key {
-        width: 65px;
-        height: 65px;
-        font-size: 26px;
-    }
+    /* 3. باقي التعديلات */
+    .quoteText{ font-size: 22px; }
+    .quoteSign{ font-size: 18px; }
+    .devList { grid-template-columns: 1fr !important; }
+    .devItem { font-size: 16px; }
+    .keys { width: 280px; }
+    .key { width: 65px; height: 65px; font-size: 26px; }
 }
 
 </style>
