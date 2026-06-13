@@ -699,24 +699,42 @@ canvas{
 
 /* ================= تعديلات الهاتف القوية ================= */
 @media(max-width: 480px){
+    /* 1. رفع بطاقة الرسالة للأعلى وتصغير حوافها قليلاً لتتسع الشاشة */
+    .card {
+        top: 38% !important; /* تم رفع البطاقة */
+        padding: 25px 15px !important;
+        width: 95% !important;
+    }
+    .card h1 {
+        font-size: 30px !important;
+        margin: 10px 0 !important;
+    }
+    .card p {
+        font-size: 17px !important;
+        line-height: 1.8 !important;
+    }
+
+    /* 2. ترتيب الأزرار وتوفير مساحتها */
     .final-buttons{
-        bottom: 120px; /* تم رفع الأزرار للأعلى لتجنب تداخل الشاشة */
-        gap: 15px;
+        bottom: 90px; /* نزلناها بشكل طفيف جداً لتعطي مساحة للنص، وستبقى فوق شريط الهاتف */
+        gap: 12px;
         flex-direction: column;
         align-items: center;
     }
     .finalBtn{
-        padding: 15px;
-        font-size: 16px;
+        padding: 12px;
+        font-size: 15px;
         width: 85%;
         max-width: 250px;
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
+    
+    /* 3. تعديلات النصوص والمفاتيح الأخرى */
     .quoteText{
-        font-size: 26px;
+        font-size: 24px;
     }
     .quoteSign{
-        font-size: 22px;
+        font-size: 20px;
     }
     .devList {
         grid-template-columns: 1fr !important;
@@ -731,12 +749,6 @@ canvas{
         width: 65px;
         height: 65px;
         font-size: 26px;
-    }
-    .card h1 {
-        font-size: 32px !important;
-    }
-    .card p {
-        font-size: 18px !important;
     }
 }
 
